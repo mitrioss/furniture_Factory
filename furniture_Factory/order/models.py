@@ -4,13 +4,13 @@ from workshop.models import Workshop
 
 
 STATUS_CHOICES = [
-    ('admin', 'Администратор'),
-    ('supervisor', 'Начальник цеха'),
-    ('worker', 'Рабочий'),
+    ('in progress', 'в процессе'),
+    ('completed', 'завершен'),
+    ('cancelled', 'отменен'),
 ]
 
 class Order(models.Model):
-    orderNumber = models.IntegerField(
+    orderNumber = models.PositiveIntegerField(
         verbose_name='Номер заказа',
         unique=True
     )
@@ -35,4 +35,4 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
     def __str__(self):
-        return self.orderNumber
+        return f"Заказ #{self.orderNumber}"
