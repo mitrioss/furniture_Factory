@@ -3,22 +3,31 @@ from django.db import models
 from workshop.models import Workshop
 
 
-class StatusOrder(models.Model):
-    nameStatus = models.CharField(max_length=10, verbose_name='Название статуса')
-
-    class Meta:
-        verbose_name = 'статус'
-        verbose_name_plural = 'Статусы'
-
-    def __str__(self):
-        return self.nameStatus
+STATUS_CHOICES = [
+    ('admin', 'Администратор'),
+    ('supervisor', 'Начальник цеха'),
+    ('worker', 'Рабочий'),
+]
 
 class Order(models.Model):
-    orderNumber = models.IntegerField(verbose_name='Номер заказа', unique=True)
+    orderNumber = models.IntegerField(
+        verbose_name='Номер заказа',
+        unique=True
+    )
     startDate = models.DateField(verbose_name='Дата начала')
     endDate = models.DateField(verbose_name='Дата окончания')
-    status = models.ForeignKey(StatusOrder, verbose_name='Статус')
-    workshops = models.ForeignKey(Workshop, verbose_name='Цех', blank=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='working',
+        verbose_name='Статус'
+    )
+    workshops = models.ForeignKey(
+        Workshop,
+        verbose_name='Цех',
+        on_delete=models.CASCADE,
+        related_name='orders'
+    )
     description = models.TextField(verbose_name='Описание')
 
     class Meta:
