@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}
+  Цех
+{% endblock %}
+
+{% block content %}
+  {% with data=form.instance %}
+    {% if "/edit/" in request.path %}
+      <h2>Редактировать цех {{ data.name }}</h2>
+    {% elif "/delete/" in request.path %}
+      <h2>Удалить цех {{ data.pk }}</h2>
+    {% else %}
+      <h2>Добавить новый цех</h2>
+    {% endif %}
+    <div class="card col-4">
+      <div class="card-header">
+        Цех
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% if not "/delete/" in request.path %}
+            {% bootstrap_form form %}
+          {% else %}
+            <p>{{ data.name }}</p>
+            <p>{{ data.supervisor }}</p>
+            <p>{{ data.description }}</p>
+          {% endif %}
+          {% bootstrap_button button_type="submit" content="Отправить" %}
+        </form>
+      </div>
+    </div>
+    {% if form.is_valid %}
+      <h2>Цех {{ data.name }} добавлен</h2>
+      <div>Id цеха: {{ data.id }}</div>
+    {% endif %}
+  {% endwith %}
+  <hr>
+  <div>
+    <a href="{% url 'workshop:list_workshop' %}">Список всех цехов</a>
+  </div>
+{% endblock %}

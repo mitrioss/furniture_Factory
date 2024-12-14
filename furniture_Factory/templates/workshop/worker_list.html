@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <!-- Кнопка для добавления нового рабочего -->
+  <div class="mb-3">
+    <a href="{% url 'workshop:create_worker' %}" class="btn btn-primary">
+      Добавить нового рабочего
+    </a>
+  </div>
+
+  <!-- Список рабочих -->
+  {% for worker in object_list %}
+    <div class="card mb-3" style="width: 40rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ worker.fullName }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <small>
+            ФИО рабочего: {{ worker.fullName }} <br>
+            Дата рождения: {{ worker.dateBirth }} <br>
+            Цех: {{ worker.workshop }} <br>
+            Статус: {{ worker.get_status_display }} <br>
+            Время работы: {{ worker.workingHours }} <br>
+          </small>
+        </h6>
+        <a href="{% url 'workshop:edit_worker' worker.id %}" class="btn btn-warning btn-sm">Редактировать</a>
+        <a href="{% url 'workshop:delete_worker' worker.id %}" class="btn btn-danger btn-sm">Удалить</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>Нет рабочих.</p>
+  {% endfor %}
+{% endblock content %}

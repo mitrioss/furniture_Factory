@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">ID заказа: {{ object.id }}</h4>
+      <hr>
+      {% if object.image %}
+        <div class="text-center mb-3">
+          <img src="{{ object.image.url }}" class="img-fluid" alt="Изображение заказа" style="max-height: 200px;">
+        </div>
+      {% endif %}
+      <h2 class="card-title">Номер заказа: {{ object.orderNumber }}</h2>
+      <p class="card-text"><strong>Дата начала:</strong> {{ object.startDate }}</p>
+      <p class="card-text"><strong>Дата окончания:</strong> {{ object.endDate }}</p>
+      <p class="card-text"><strong>Статус:</strong> {{ object.get_status_display }}</p>
+      <p class="card-text"><strong>Цех:</strong> {{ object.workshops }}</p>
+      <p class="card-text"><strong>Описание:</strong> {{ object.description }}</p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

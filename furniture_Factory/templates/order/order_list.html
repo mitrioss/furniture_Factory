@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <!-- Кнопка для создания нового заказа -->
+  <div class="mb-3">
+    <a href="{% url 'order:create_order' %}" class="btn btn-primary">
+      Создать новый заказ
+    </a>
+  </div>
+
+  <!-- Список заказов -->
+  {% for order in object_list %}
+    <div class="card mb-3" style="width: 40rem;">
+      <div class="card-body">
+        <h5 class="card-title">Заказ №{{ order.orderNumber }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <small>
+            Дата начала: {{ order.startDate }} <br>
+            Дата окончания: {{ order.endDate }} <br>
+            Статус: {{ order.get_status_display }} <br>
+            Цех: {{ order.workshops }} <br>
+          </small>
+        </h6>
+        <p class="card-text">{{ order.description|truncatechars:20 }}</p>
+        <a href="{% url 'order:edit_order' order.id %}" class="btn btn-warning btn-sm">Редактировать</a>
+        <a href="{% url 'order:delete_order' order.id %}" class="btn btn-danger btn-sm">Удалить</a>
+        <a href="{% url 'order:detail_order' order.id %}" class="btn btn-info btn-sm">Читать полностью</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>Нет заказов.</p>
+  {% endfor %}
+{% endblock content %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <!-- Кнопка для добавления нового цеха -->
+  <div class="mb-3">
+    <a href="{% url 'workshop:create_workshop' %}" class="btn btn-primary">
+      Добавить новый цех
+    </a>
+  </div>
+
+  <!-- Список цехов -->
+  {% for workshop in object_list %}
+    <div class="card mb-3" style="width: 40rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ workshop.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <small>
+            Название цеха: {{ workshop.name }} <br>
+            Начальник цеха: {{ workshop.supervisor }} <br>
+            Количество работников: {{ workshop.numberWorkers }} <br>
+          </small>
+        </h6>
+        <p class="card-text">{{ workshop.description|truncatechars:20 }}</p>
+        <a href="{% url 'workshop:edit_workshop' workshop.id %}" class="btn btn-warning btn-sm">Редактировать</a>
+        <a href="{% url 'workshop:delete_workshop' workshop.id %}" class="btn btn-danger btn-sm">Удалить</a>
+        <a href="{% url 'workshop:detail_workshop' workshop.id %}" class="btn btn-info btn-sm">Читать полностью</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>Нет цехов.</p>
+  {% endfor %}
+{% endblock content %}

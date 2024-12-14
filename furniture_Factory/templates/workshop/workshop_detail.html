@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">ID цеха: {{ object.id }}</h4>
+      <hr>
+      {% if object.image %}
+        <div class="text-center mb-3">
+          <img src="{{ object.image.url }}" class="img-fluid" alt="Изображение цеха" style="max-height: 200px;">
+        </div>
+      {% endif %}
+      <h2 class="card-title">Название цеха: {{ object.name }}</h2>
+      <p class="card-text"><strong>Начальник цеха:</strong> {{ object.supervisor }}</p>
+      <p class="card-text"><strong>Описание цеха:</strong> {{ object.description }}</p>
+      <p class="card-text"><strong>Количество работников:</strong> {{ object.numberWorkers }}</p>
+    </div>
+  </div>
+
+  <!-- Секция с работниками -->
+  <div class="mt-4">
+    <h3>Работники цеха:</h3>
+    {% if workers %}
+      <ul class="list-group">
+        {% for worker in workers %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ worker.fullName }}
+            <span>
+              <a href="{% url 'workshop:edit_worker' worker.id %}" class="btn btn-sm btn-primary">Редактировать</a>
+              <a href="{% url 'workshop:delete_worker' worker.id %}" class="btn btn-sm btn-danger">Удалить</a>
+            </span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">Нет работников в этом цехе.</p>
+    {% endif %}
+  </div>
+
+  <!-- Секция с заказами -->
+  <div class="mt-4">
+    <h3>Заказы, обрабатываемые в этом цеху:</h3>
+    {% if orders %}
+      <ul class="list-group">
+        {% for order in orders %}
+          <li class="list-group-item">
+            <h5>Заказ #{{ order.orderNumber }}</h5>
+            <p><strong>Дата начала:</strong> {{ order.startDate }}</p>
+            <p><strong>Дата окончания:</strong> {{ order.endDate }}</p>
+            <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+            <p><strong>Описание:</strong> {{ order.description|truncatechars:50 }}</p>
+            <a href="{% url 'order:detail_order' order.id %}" class="btn btn-sm btn-info">Подробнее</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">Нет заказов в этом цеху.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
