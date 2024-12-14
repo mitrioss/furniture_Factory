@@ -1,5 +1,7 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 from workshop.models import Workshop, Worker
 
@@ -21,6 +23,12 @@ class WorkshopListView(ListView):
 
 class WorkshopDetailView(DetailView):
     model = Workshop
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(Workshop, pk=self.kwargs['pk'])
+        if not obj:  # Дополнительная проверка, если необходимо
+            raise Http404("Цех не найден")
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
